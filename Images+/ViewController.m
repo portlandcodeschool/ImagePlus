@@ -17,9 +17,62 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.actionsButton.enabled = NO;
 }
 
 - (IBAction)showActions:(id)sender {
+    
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:@"Image options"];
+    
+    [attributedTitle addAttribute:NSFontAttributeName
+                            value:[UIFont systemFontOfSize:28.0]
+                            range:NSMakeRange(0, 13)];
+    
+    [actionSheet setValue:attributedTitle forKey:@"attributedTitle"];
+    
+    UIAlertAction *save = [UIAlertAction actionWithTitle:@"Save to library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    }];
+    
+    [actionSheet addAction:save];
+    
+    UIAlertAction *email = [UIAlertAction actionWithTitle:@"Email" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    }];
+    
+    [actionSheet addAction:email];
+    
+    UIAlertAction *edit = [UIAlertAction actionWithTitle:@"Edit" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self editImage];
+    }];
+    
+    [actionSheet addAction:edit];
+    
+    
+    UIAlertAction *revert = [UIAlertAction actionWithTitle:@"Revert to original" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    }];
+    
+    [actionSheet addAction:revert];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Discard image" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+    }];
+    
+    [actionSheet addAction:cancel];
+    
+    UIAlertAction *discard = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    }];
+    
+    [actionSheet addAction:discard];
+    
+    [self presentViewController:actionSheet animated:YES completion:nil];
+}
+
+- (void)editImage {
+    
+    CLImageEditor *editor = [[CLImageEditor alloc] initWithImage:self.backgroundImage.image];
+    editor.delegate = self;
+    
+    [self presentViewController:editor animated:YES completion:nil];
     
 }
 
@@ -84,13 +137,19 @@
     
 }
 
+#pragma mark - ImagePickerControllerDelegate
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
-    UIImage *chosenImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    self.actionsButton.enabled = YES;
     
-    self.backgroundImage.image = chosenImage;
+    UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
     
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    self.originalImage = chosenImage;
+    
+    CLImageEditor *editor = [[CLImageEditor alloc] initWithImage:chosenImage];
+    editor.delegate = self;
+    
+    [picker pushViewController:editor animated:YES];
 
 }
 
@@ -98,6 +157,13 @@
     
     [picker dismissViewControllerAnimated:YES completion:nil];
     
+}
+
+#pragma mark - CLImageEditorDelegate
+- (void)imageEditor:(CLImageEditor *)editor didFinishEdittingWithImage:(UIImage *)image
+{
+    self.backgroundImage.image = image;
+    [editor dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
