@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "CLImageEditor.h"
+#import <MessageUI/MessageUI.h>
 
-@interface ViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLImageEditorDelegate>
+@interface ViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLImageEditorDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *actionsButton;
