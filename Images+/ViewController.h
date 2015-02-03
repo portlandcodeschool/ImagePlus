@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *actionsButton;
 @property UIImage *originalImage;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 
 @end
 

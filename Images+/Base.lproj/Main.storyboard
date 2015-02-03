@@ -25,6 +25,12 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="jeD-G2-Vhr"/>
+                                    <barButtonItem systemItem="edit" id="2J6-u3-coe">
+                                        <connections>
+                                            <action selector="showEditActions:" destination="vXZ-lx-hvc" id="zlW-vK-TmJ"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="0GH-Qd-56H"/>
                                     <barButtonItem systemItem="add" id="nRJ-QW-Wff">
                                         <connections>
                                             <action selector="showAddImages:" destination="vXZ-lx-hvc" id="QkX-sS-Mi2"/>
@@ -52,10 +58,12 @@
                     <connections>
                         <outlet property="actionsButton" destination="Zzh-zV-s8d" id="zDX-Xa-61c"/>
                         <outlet property="backgroundImage" destination="ftT-CP-rmY" id="CAP-Ec-YWZ"/>
+                        <outlet property="editButton" destination="2J6-u3-coe" id="NDv-lE-djB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="292" y="348"/>
         </scene>
     </scenes>
 </document>

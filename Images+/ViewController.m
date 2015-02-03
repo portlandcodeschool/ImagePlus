@@ -19,12 +19,14 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     self.actionsButton.enabled = NO;
+    self.editButton.enabled = NO;
 }
 
-- (IBAction)showActions:(id)sender {
+- (IBAction)showEditActions:(id)sender {
+    
     
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
-   
+    
     NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:@"Image options"];
     
     [attributedTitle addAttribute:NSFontAttributeName
@@ -32,18 +34,7 @@
                             range:NSMakeRange(0, 13)];
     
     [actionSheet setValue:attributedTitle forKey:@"attributedTitle"];
-    
-    UIAlertAction *save = [UIAlertAction actionWithTitle:@"Save to library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self saveToLibrary];
-    }];
-    
-    [actionSheet addAction:save];
-    
-    UIAlertAction *email = [UIAlertAction actionWithTitle:@"Email" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self emailImage];
-    }];
-    
-    [actionSheet addAction:email];
+
     
     UIAlertAction *edit = [UIAlertAction actionWithTitle:@"Edit" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self editImage];
@@ -58,19 +49,28 @@
     
     [actionSheet addAction:revert];
     
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Discard image" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+    UIAlertAction *discard = [UIAlertAction actionWithTitle:@"Discard image" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         [self discardImage];
-    }];
-    
-    [actionSheet addAction:cancel];
-    
-    UIAlertAction *discard = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
     }];
     
     [actionSheet addAction:discard];
     
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    }];
+    
+    [actionSheet addAction:cancel];
+    
     [self presentViewController:actionSheet animated:YES completion:nil];
+
 }
+
+- (IBAction)showActions:(id)sender {
+    
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[self.backgroundImage.image] applicationActivities:nil];
+    
+    [self presentViewController:activityViewController animated:YES completion:nil];
+    
+ }
 
 - (IBAction)showAddImages:(id)sender {
     
@@ -136,6 +136,8 @@
     self.backgroundImage.image = nil;
     
     self.actionsButton.enabled = NO;
+    self.editButton.enabled = NO;
+
 }
 
 - (void)editImage {
@@ -219,7 +221,7 @@
     
     NSString *message;
     
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [controller dismissViewControllerAnimated:YES completion:NULL];
     
     if (result == MFMailComposeResultSent) {
         message = @"Email sent";
@@ -245,6 +247,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     self.actionsButton.enabled = YES;
+    self.editButton.enabled = YES;
     
     UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
     
